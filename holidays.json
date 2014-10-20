@@ -1,0 +1,14 @@
+{
+	"UK": [
+		{
+			"month": 0,
+			"dayOfMonth": 1,
+			"name": "New Year's Day"
+		},
+		{
+			"month": 11,
+			"dayOfMonth": 25,
+			"name": "Christmas Day"
+		}
+	]
+}
