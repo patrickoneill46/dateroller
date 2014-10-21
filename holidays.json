@@ -3,11 +3,13 @@
 		{
 			"month": 0,
 			"dayOfMonth": 1,
+			"year": 2014,
 			"name": "New Year's Day"
 		},
 		{
 			"month": 11,
 			"dayOfMonth": 25,
+			"year": "2014",
 			"name": "Christmas Day"
 		}
 	]

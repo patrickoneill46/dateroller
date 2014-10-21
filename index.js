@@ -4,7 +4,7 @@ var fs = require('fs'),
 
 var NUM_DAYS_BY_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-var BANK_HOLIDAYS;
+var BANK_HOLIDAYS = {};
 
 if (process.env.HOLIDAY_JSON_PATH){
 
@@ -13,15 +13,38 @@ if (process.env.HOLIDAY_JSON_PATH){
 		if (err){
 			throw err
 		} else{
-			BANK_HOLIDAYS = data;
+
+			var holidayJsonData = JSON.parse(data);
+
+			for (var market in holidayJsonData){
+
+				BANK_HOLIDAYS[market] = [];
+
+				holidayJsonData[market].forEach(function(holiday){
+					
+					BANK_HOLIDAYS[market].push(new moment({
+						year: holiday.year,
+						month: holiday.month,
+						day: holiday.dayOfMonth
+					}));
+				});
+			}
 		}
 	});
 }
 
-function isHoliday(date){
+function isHoliday(date, sMarket){
 
 	var dayOfMonth = date.day(),
 		month = date.month();
+
+	sMarket = sMarket || 'UK'
+
+	return BANK_HOLIDAYS[sMarket].some(function(element){
+
+		return date.isSame(element, 'day');
+
+	});
 
 }
 
