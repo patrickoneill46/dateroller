@@ -51,8 +51,7 @@ module.exports = function(arrBankHolidays){
 
 		var newDate = moment(originalDate);
 		newDate.add(numDaysRoll, 'days');
-		return originalDate.isSame()
-
+		return originalDate.isSame(newDate, 'month');
 	}
 
 	//helper function
@@ -62,8 +61,6 @@ module.exports = function(arrBankHolidays){
 
 
 	function following(date, calendar){
-
-		console.log(isWeekDay(date.day()));
 
 		if (!isWeekDay(date.day()) && !isHoliday(date, calendar)) {
 			if (date.day() === 0){
@@ -79,12 +76,19 @@ module.exports = function(arrBankHolidays){
 
 		if (!isWeekDay(date.day()) && !isHoliday(date, calendar)){
 			if (date.day() === 0){
+				if(isSameMonth(date, 1)){
+					date.add(1, 'days');
+				} else {
 					date.add(-2, 'days');
+				}
+			} else {
+				if(isSameMonth(date, 2)){
+					date.add(2, 'days');
 				} else {
 					date.add(-1, 'days');
+				}
 			}
 		}
-
 		return date;
 	}
 
