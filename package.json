@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "./node_modules/mocha/bin/mocha --reporter spec test/index.js",
     "start": "HOLIDAY_JSON_PATH=holidays.json node index.js"
   },
   "repository": {
@@ -18,6 +18,11 @@
   },
   "homepage": "https://github.com/patrickoneill46/dateroller",
   "dependencies": {
+    "async": "^0.9.0",
     "moment": "^2.8.3"
+  },
+  "devDependencies": {
+    "chai": "^1.9.2",
+    "mocha": "^2.0.1"
   }
 }
