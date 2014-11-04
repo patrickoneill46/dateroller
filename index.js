@@ -96,9 +96,9 @@ module.exports = function(arrBankHolidays){
 
 		if (!isWeekDay(date.day()) && !isHoliday(date, calendar)){
 			if (date.day() === 0){
-					date.add(-2, 'days');
-				} else {
-					date.add(-1, 'days');
+				date.add(-2, 'days');
+			} else {
+				date.add(-1, 'days');
 			}
 		}
 		return date;
@@ -108,13 +108,23 @@ module.exports = function(arrBankHolidays){
 
 		if (!isWeekDay(date.day()) && !isHoliday(date, calendar)){
 			if (date.day() === 0){
+				if(isSameMonth(date, -2)){
+					//sunday
 					date.add(-2, 'days');
 				} else {
+					date.add(1, 'days');
+				}
+			} else {
+				//saturday
+				if(isSameMonth(date, -1)){
 					date.add(-1, 'days');
+				} else {
+					//roll to monday
+					date.add(2, 'days');
+				}
 			}
 		}
 		return date;
-
 	}
 
 	function actual(date, calendar){

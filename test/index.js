@@ -9,6 +9,8 @@ describe('Roll Dates', function() {
   beforeEach(function(){
     saturdayEndOfMonth = new moment('29/11/2014', 'DD-MM-YYYY');
     sundayEndOfMonth = new moment('30/11/2014', 'DD-MM-YYYY');
+    saturdayStartOfMonth = new moment('1/11/2014', 'DD-MM-YYYY');
+    sundayStartOfMonth = new moment('2/11/2014', 'DD-MM-YYYY');
     weekday = new moment('26/11/2014', 'DD-MM-YYYY');
   });
 
@@ -16,7 +18,6 @@ describe('Roll Dates', function() {
 
       //saturday, end of the month
       dateroller.following(saturdayEndOfMonth);
-
       expect(saturdayEndOfMonth.date()).to.equal(1);
       expect(saturdayEndOfMonth.month()).to.equal(11);
 
@@ -35,7 +36,6 @@ describe('Roll Dates', function() {
 
       //saturday, end of the month
       dateroller.modifiedFollowing(saturdayEndOfMonth);
-
       expect(saturdayEndOfMonth.date()).to.equal(28);
       expect(saturdayEndOfMonth.month()).to.equal(10);
 
@@ -46,6 +46,42 @@ describe('Roll Dates', function() {
 
       //weekday
       dateroller.modifiedFollowing(weekday);
+      expect(weekday.date()).to.equal(26);
+      expect(weekday.month()).to.equal(10);
+  });
+
+  it('Previous', function(){
+
+      // saturday, start of the month
+      dateroller.previous(saturdayStartOfMonth);
+      expect(saturdayStartOfMonth.date()).to.equal(31);
+      expect(saturdayStartOfMonth.month()).to.equal(9);
+
+      //sunday, start of the month
+      dateroller.previous(sundayStartOfMonth);
+      expect(sundayStartOfMonth.date()).to.equal(31);
+      expect(sundayStartOfMonth.month()).to.equal(9);
+
+      dateroller.previous(weekday);
+      expect(weekday.date()).to.equal(26);
+      expect(weekday.month()).to.equal(10);
+      //weekday
+  });
+
+  it('Modified Previous', function(){
+
+      //saturday, start of the month
+      dateroller.modifiedPrevious(saturdayStartOfMonth);
+      expect(saturdayStartOfMonth.date()).to.equal(3);
+      expect(saturdayStartOfMonth.month()).to.equal(10);
+
+      //sunday, start of the month
+      dateroller.modifiedPrevious(sundayStartOfMonth);
+      expect(sundayStartOfMonth.date()).to.equal(3);
+      expect(sundayStartOfMonth.month()).to.equal(10);
+
+      //weekday
+      dateroller.modifiedPrevious(weekday);
       expect(weekday.date()).to.equal(26);
       expect(weekday.month()).to.equal(10);
   });
