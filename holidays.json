@@ -3,14 +3,62 @@
 		{
 			"month": 0,
 			"dayOfMonth": 1,
-			"year": 2014,
+			"year": 2015,
 			"name": "New Year's Day"
 		},
 		{
 			"month": 11,
 			"dayOfMonth": 25,
-			"year": "2014",
+			"year": 2014,
 			"name": "Christmas Day"
+		},
+		{
+			"month": 11,
+			"dayOfMonth": 26,
+			"year": 2014,
+			"name": "Boxing Day"
+		},
+		{
+			"month": 3,
+			"dayOfMonth": 3,
+			"year": 2015,
+			"name": "Good Friday"
+		},
+		{
+			"month": 3,
+			"dayOfMonth": 6,
+			"year": 2015,
+			"name": "Easter Monday"
+		},
+		{
+			"month": 4,
+			"dayOfMonth": 4,
+			"year": 2015,
+			"name": "May Day"
+		},
+		{
+			"month": 4,
+			"dayOfMonth": 25,
+			"year": 2015,
+			"name": "Spring Bank Holiday" 
+		},
+		{
+			"month": 7,
+			"dayOfMonth": 31,
+			"year": 2015,
+			"name": "Summer Bank Holiday"
+		},
+		{
+			"month": 11,
+			"dayOfMonth": 25,
+			"year": 2015,
+			"name": "Christmas Day"
+		},
+		{
+			"month": 11,
+			"dayOfMonth": 28,
+			"year": 2015,
+			"name": "Boxing Day"
 		}
 	]
 }

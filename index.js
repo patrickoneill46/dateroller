@@ -29,7 +29,6 @@ if (process.env.HOLIDAY_JSON_PATH){
 
 module.exports = function(arrBankHolidays){
 
-	BANK_HOLIDAYS = arrBankHolidays;
 
 	//helper function
 	function isHoliday(date, calendar){
@@ -37,10 +36,9 @@ module.exports = function(arrBankHolidays){
 		calendar = calendar || 'UK';
 
 		//copy date
-
-		// return BANK_HOLIDAYS[calendar].some(function(element){
-		// 	return date.isSame(element, 'day');
-		// });
+		return BANK_HOLIDAYS[calendar].some(function(element){
+			return date.isSame(element, 'day');
+		});
 
 		//ToDo look over this method.
 		return false;
@@ -57,6 +55,10 @@ module.exports = function(arrBankHolidays){
 	//helper function
 	function isWeekDay(nDayOfWeek){
 		return [0, 6].indexOf(nDayOfWeek) === -1;
+	}
+
+	function rollDate(date, numDays){
+		date.add(numDays, 'days');
 	}
 
 
@@ -136,6 +138,8 @@ module.exports = function(arrBankHolidays){
 		following: following,
 		modifiedFollowing: modifiedFollowing,
 		previous: previous,
-		modifiedPrevious: modifiedPrevious
+		modifiedPrevious: modifiedPrevious,
+		isHoliday: isHoliday,
+		isWeekDay: isWeekDay
 	};
 }
