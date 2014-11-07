@@ -29,19 +29,19 @@ if (process.env.HOLIDAY_JSON_PATH){
 
 module.exports = function(arrBankHolidays){
 
-
 	//helper function
-	function isHoliday(date, calendar){
+	function isHoliday(date, numDays, calendar){
 
 		calendar = calendar || 'UK';
 
-		//copy date
+		var clonedDate = new moment(date);
+		if(numDays){
+			clonedDate.add(numDays, 'days');
+		}
 		return BANK_HOLIDAYS[calendar].some(function(element){
-			return date.isSame(element, 'day');
+			return clonedDate.isSame(element, 'day');
 		});
 
-		//ToDo look over this method.
-		return false;
 	}
 
 	//helper function
@@ -53,78 +53,65 @@ module.exports = function(arrBankHolidays){
 	}
 
 	//helper function
-	function isWeekDay(nDayOfWeek){
-		return [0, 6].indexOf(nDayOfWeek) === -1;
+	function isWeekDay(date){
+		return [0, 6].indexOf(date.day()) === -1;
 	}
 
-	function rollDate(date, numDays){
-		date.add(numDays, 'days');
-	}
+	function rollDate(date, rollDayForwards, modified, calendar){
 
+		var businessDayFound = false;
+		var incrementer = rollDayForwards ? 1 : -1;
+
+		while(!businessDayFound){
+
+			//if its a weekday and not a holiday
+			if(isWeekDay(date) && !isHoliday(date, incrementer, calendar)){
+
+				businessDayFound = true;
+
+			} else {
+
+				//for modifiedFollowing and modifiedPrevious 
+				//if the rolled date is in another month, roll the date the oppouisute way
+				if(modified && !isSameMonth(date, incrementer)){
+					incrementer *= -1;
+				}
+				//roll the day by one.
+				date.add(incrementer, 'days');
+			}
+		}
+
+		return date;
+	}
 
 	function following(date, calendar){
 
-		if (!isWeekDay(date.day()) && !isHoliday(date, calendar)) {
-			if (date.day() === 0){
-				date.add(1, 'days');
-			} else {
-				date.add(2, 'days');
-			}
+		if (!isWeekDay(date) && !isHoliday(date, calendar)) {
+			rollDate(date, true, false, calendar);
 		}
 
 		return date;
 	}
 	function modifiedFollowing(date, calendar){
 
-		if (!isWeekDay(date.day()) && !isHoliday(date, calendar)){
-			if (date.day() === 0){
-				if(isSameMonth(date, 1)){
-					date.add(1, 'days');
-				} else {
-					date.add(-2, 'days');
-				}
-			} else {
-				if(isSameMonth(date, 2)){
-					date.add(2, 'days');
-				} else {
-					date.add(-1, 'days');
-				}
-			}
+		if (!isWeekDay(date) && !isHoliday(date, calendar)){
+			rollDate(date, true, true, calendar);
 		}
 		return date;
 	}
 
 	function previous(date, calendar){
 
-		if (!isWeekDay(date.day()) && !isHoliday(date, calendar)){
-			if (date.day() === 0){
-				date.add(-2, 'days');
-			} else {
-				date.add(-1, 'days');
-			}
+		if (!isWeekDay(date) && !isHoliday(date, calendar)){
+			rollDate(date, false, false, calendar);
 		}
 		return date;
 	}
 
 	function modifiedPrevious(date, calendar){
 
-		if (!isWeekDay(date.day()) && !isHoliday(date, calendar)){
-			if (date.day() === 0){
-				if(isSameMonth(date, -2)){
-					//sunday
-					date.add(-2, 'days');
-				} else {
-					date.add(1, 'days');
-				}
-			} else {
-				//saturday
-				if(isSameMonth(date, -1)){
-					date.add(-1, 'days');
-				} else {
-					//roll to monday
-					date.add(2, 'days');
-				}
-			}
+		if (!isWeekDay(date) && !isHoliday(date, calendar)){
+			rollDate(date, false, true, calendar);
 		}
 		return date;
 	}

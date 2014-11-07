@@ -89,14 +89,19 @@ describe('Roll Dates', function() {
   it('Holiday checker', function(){
 
     var xmas = new moment('25-12-2014', 'DD-MM-YYYY');
+    var xmasEve = new moment('24-12-2014', 'DD-MM-YYYY');
+
     expect(dateroller.isHoliday(xmas)).to.be.true;
+
+    expect(dateroller.isHoliday(xmasEve)).to.be.false;
+    expect(dateroller.isHoliday(xmasEve, 1)).to.be.true;
 
   });
 
   it('Weekend checker', function(){
 
     var saturday = new moment('1-11-2014', 'DD-MM-YYYY');
-    expect(dateroller.isWeekDay(saturday.day())).to.be.false;
+    expect(dateroller.isWeekDay(saturday)).to.be.false;
 
   });
 });
