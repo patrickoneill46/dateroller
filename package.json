@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "HOLIDAY_JSON_PATH=holidays.json ./node_modules/mocha/bin/mocha --reporter spec test/index.js",
-    "start": "HOLIDAY_JSON_PATH=holidays.json node index.js"
+    "test": "./node_modules/mocha/bin/mocha --reporter spec test/index.js",
+    "start": "HOLIDAY_JSON_PATH=holidays.json node  index.js",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/mocha --reporter test/index.js"
   },
   "repository": {
     "type": "git",

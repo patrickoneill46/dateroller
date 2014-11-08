@@ -7,7 +7,7 @@ var saturdayEndOfMonth, sundayEndOfMonth, weekday;
 describe('Roll Dates', function() {
 
   before(function(done){
-    dateroller.loadHolidaysFromFile('data/holidays.json', done);
+    dateroller.loadHolidaysFromFile('test/data/holidays.json', done);
   });
 
   beforeEach(function(){

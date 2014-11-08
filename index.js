@@ -19,10 +19,12 @@ if (process.env.HOLIDAY_JSON_PATH){
 
 function loadHolidaysFromFile(filepath, callback){
 
-	fs.readFile(process.env.HOLIDAY_JSON_PATH, function(err, data){
+	fs.readFile(filepath, function(err, data){
+
+		console.log(filepath);
 
 		if(err){
-			server.emit('error loading file', err, process.env.HOLIDAY_JSON_PATH);
+			server.emit('error loading file', err, filepath);
 			callback(err);
 		}
 
