@@ -1,10 +1,14 @@
 var expect = require('chai').expect,
     moment = require('moment'),
-    dateroller = require('../index')([]);
+    dateroller = require('../index');
 
 var saturdayEndOfMonth, sundayEndOfMonth, weekday;
 
 describe('Roll Dates', function() {
+
+  before(function(done){
+    dateroller.loadHolidaysFromFile('data/holidays.json', done);
+  });
 
   beforeEach(function(){
     saturdayEndOfMonth = new moment('29/11/2014', 'DD-MM-YYYY');
