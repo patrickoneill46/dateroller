@@ -2,9 +2,16 @@ var expect = require('chai').expect,
     moment = require('moment'),
     dateroller = require('../index');
 
-var saturdayEndOfMonth, sundayEndOfMonth, weekday;
+var saturdayEndOfMonth, 
+    saturdayStartOfMoth, 
+    sundayEndOfMonth,
+    sundayStartOfMonth, 
+    weekday,
+    xmas,
+    xmasEve,
+    mayday;
 
-describe('Roll Dates', function() {
+describe('dateroller tests', function() {
 
   before(function(done){
     dateroller.loadHolidaysFromFile('test/data/holidays.json', done);
@@ -16,6 +23,9 @@ describe('Roll Dates', function() {
     saturdayStartOfMonth = new moment('1/11/2014', 'DD-MM-YYYY');
     sundayStartOfMonth = new moment('2/11/2014', 'DD-MM-YYYY');
     weekday = new moment('26/11/2014', 'DD-MM-YYYY');
+    xmas = new moment('25-12-2014', 'DD-MM-YYYY');
+    xmasEve = new moment('24-12-2014', 'DD-MM-YYYY'),
+    mayday = new moment('04-05-2015', 'DD-MM-YYYY');
   });
 
   it('Following', function(){
@@ -34,11 +44,15 @@ describe('Roll Dates', function() {
       dateroller.following(weekday);
       expect(weekday.date()).to.equal(26);
       expect(weekday.month()).to.equal(10);
+
+      //mayday
+      dateroller.following(mayday);
+      expect(mayday.date()).to.equal(5);
   });
 
   it('Modified Following', function(){
 
-      //saturday, end of the month
+      // saturday, end of the month
       dateroller.modifiedFollowing(saturdayEndOfMonth);
       expect(saturdayEndOfMonth.date()).to.equal(28);
       expect(saturdayEndOfMonth.month()).to.equal(10);
@@ -52,6 +66,10 @@ describe('Roll Dates', function() {
       dateroller.modifiedFollowing(weekday);
       expect(weekday.date()).to.equal(26);
       expect(weekday.month()).to.equal(10);
+
+      //mayday
+      dateroller.following(mayday);
+      expect(mayday.date()).to.equal(5);
   });
 
   it('Previous', function(){
@@ -69,7 +87,11 @@ describe('Roll Dates', function() {
       dateroller.previous(weekday);
       expect(weekday.date()).to.equal(26);
       expect(weekday.month()).to.equal(10);
-      //weekday
+      weekday
+
+      //mayday
+      dateroller.previous(mayday);
+      expect(mayday.date()).to.equal(1);
   });
 
   it('Modified Previous', function(){
@@ -88,17 +110,22 @@ describe('Roll Dates', function() {
       dateroller.modifiedPrevious(weekday);
       expect(weekday.date()).to.equal(26);
       expect(weekday.month()).to.equal(10);
+
+      //mayday
+      dateroller.modifiedPrevious(mayday);
+      expect(mayday.date()).to.equal(1);
   });
 
   it('Holiday checker', function(){
 
-    var xmas = new moment('25-12-2014', 'DD-MM-YYYY');
-    var xmasEve = new moment('24-12-2014', 'DD-MM-YYYY');
 
     expect(dateroller.isHoliday(xmas)).to.be.true;
 
     expect(dateroller.isHoliday(xmasEve)).to.be.false;
     expect(dateroller.isHoliday(xmasEve, 1)).to.be.true;
+
+    expect(dateroller.isHoliday(mayday)).to.be.true;
+    expect(dateroller.isHoliday(mayday, 1)).to.be.false;
 
   });
 

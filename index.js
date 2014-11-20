@@ -21,8 +21,6 @@ function loadHolidaysFromFile(filepath, callback){
 
 	fs.readFile(filepath, function(err, data){
 
-		console.log(filepath);
-
 		if(err){
 			server.emit('error loading file', err, filepath);
 			callback(err);
@@ -47,42 +45,28 @@ function loadHolidaysFromFile(filepath, callback){
 		server.emit('loaded');
 		callback();
 	});
-
 };
 
 exports.loadHolidaysFromFile = loadHolidaysFromFile;
 
 exports.following = function (date, calendar){
 
-	if (!isWeekDay(date) && !isHoliday(date, calendar)) {
-		rollDate(date, true, false, calendar);
-	}
-
-	return date;
+	return rollDate(date, true, false, calendar);
 };
 
 exports.modifiedFollowing = function (date, calendar){
 
-	if (!isWeekDay(date) && !isHoliday(date, calendar)){
-		rollDate(date, true, true, calendar);
-	}
-	return date;
+	return rollDate(date, true, true, calendar);
 };
 
 exports.previous = function (date, calendar){
 
-	if (!isWeekDay(date) && !isHoliday(date, calendar)){
-		rollDate(date, false, false, calendar);
-	}
-	return date;
+	return rollDate(date, false, false, calendar);
 };
 
 exports.modifiedPrevious = function (date, calendar){
 
-	if (!isWeekDay(date) && !isHoliday(date, calendar)){
-		rollDate(date, false, true, calendar);
-	}
-	return date;
+	return rollDate(date, false, true, calendar);
 };
 
 exports.actual = function(date, calendar){
@@ -100,8 +84,12 @@ exports.isHoliday = isHoliday;
 
 function isHoliday(date, numDays, calendar){
 
-	calendar = calendar || 'UK';
+	if(calendar === undefined && typeof numDays === 'string'){
+		calendar = numDays;
+		numDays = null;
+	}
 
+	calendar = calendar || 'UK';
 	var clonedDate = new moment(date);
 	if(numDays){
 		clonedDate.add(numDays, 'days');
@@ -116,37 +104,57 @@ function isSameMonth(originalDate, numDaysRoll){
 
 	var newDate = moment(originalDate);
 	newDate.add(numDaysRoll, 'days');
+	// console.log(originalDate, newDate);
+	// console.log('isSameMonth', originalDate.month(), newDate.month());
 	return originalDate.isSame(newDate, 'month');
 }
 
 //helper function
 exports.isWeekDay = isWeekDay;
 
-function isWeekDay (date){
-	return [0, 6].indexOf(date.day()) === -1;
+function isWeekDay (date, numDays){
+
+	var clonedDate = new moment(date);
+	if(numDays){
+		clonedDate.add(numDays, 'days');
+	}
+
+	return [0, 6].indexOf(clonedDate.day()) === -1;
+}
+
+function isBusinessDay(date, calendar){
+	return isWeekDay(date) && !isHoliday(date, calendar);
 }
 
 function rollDate(date, rollDayForwards, modified, calendar){
 
-	var businessDayFound = false;
-	var incrementer = rollDayForwards ? 1 : -1;
+	if(!isBusinessDay(date, calendar)){
+		// console.log(date.date() + '/' + date.month() + '/' + date.year() + ' is not a business day. Rolling date...');
+		var i = 0;
 
-	while(!businessDayFound){
+		var businessDayFound = false,
+		 	incrementer = rollDayForwards ? 1 : -1;
 
-		//if its a weekday and not a holiday
-		if(isWeekDay(date) && !isHoliday(date, incrementer, calendar)){
+		while(!businessDayFound){
 
-			businessDayFound = true;
-
-		} else {
+			i++;
+			// console.log(incrementer, 'incrementer');
 
 			//for modifiedFollowing and modifiedPrevious 
 			//if the rolled date is in another month, roll the date the oppouisute way
 			if(modified && !isSameMonth(date, incrementer)){
+				
+				// console.log('reversing incrementer', i);
 				incrementer *= -1;
+				//reverse this iteration of the loops increment
 			}
-			//roll the day by one.
+
+			// console.log('adding date', incrementer);
 			date.add(incrementer, 'days');
+			if(isBusinessDay(date, calendar)){
+				// console.log('businessDayFound', i);
+				businessDayFound = true;
+			} 
 		}
 	}
 
