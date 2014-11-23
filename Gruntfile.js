@@ -30,10 +30,20 @@ module.exports = function(grunt){
           },
           src: ['test/*.js']
         }
+      },
+
+      watch: {
+        scripts: {
+          files: ['index.js', 'test/*.js'],
+          tasks: ['mochaTest:test']
+        },
+        gruntfile: {
+          files: ['Gruntfile.js']
+        },
       }
 
   	});
 
-  	grunt.registerTask('default', ['jshint:all', 'mochaTest']);
+  	grunt.registerTask('default', ['jshint:all', 'mochaTest', 'watch']);
 
 };
