@@ -1,5 +1,4 @@
-var fs = require('fs'),
-	moment = require('moment'),
+var	moment = require('moment'),
 	EventEmitter = require('events').EventEmitter;
 
 var server = new EventEmitter();
@@ -17,37 +16,11 @@ if (process.env.HOLIDAY_JSON_PATH){
 	});
 }
 
-function loadHolidaysFromFile(filepath, callback){
+function setHolidays(holidays){
+    BANK_HOLIDAYS = holidays;
+}
 
-	fs.readFile(filepath, function(err, data){
-
-		if(err){
-			server.emit('error loading file', err, filepath);
-			callback(err);
-		}
-
-		var holidayJsonData = JSON.parse(data);
-
-		for (var market in holidayJsonData){
-
-			BANK_HOLIDAYS[market] = [];
-
-			holidayJsonData[market].forEach(function(holiday){
-				
-				BANK_HOLIDAYS[market].push(new moment({
-					year: holiday.year,
-					month: holiday.month,
-					day: holiday.dayOfMonth
-				}));
-			});
-
-		}
-		server.emit('loaded');
-		callback();
-	});
-};
-
-exports.loadHolidaysFromFile = loadHolidaysFromFile;
+exports.setHolidays = setHolidays;
 
 exports.following = function (date, calendar){
 

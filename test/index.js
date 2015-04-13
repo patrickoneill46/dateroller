@@ -1,4 +1,5 @@
 var expect = require('chai').expect,
+    fs = require('fs'),
     moment = require('moment'),
     dateroller = require('../index');
 
@@ -14,7 +15,15 @@ var saturdayEndOfMonth,
 describe('dateroller tests', function() {
 
   before(function(done){
-    dateroller.loadHolidaysFromFile('test/data/holidays.json', done);
+//    dateroller.loadHolidaysFromFile('test/data/holidays.json', done);
+    fs.readFile('test/data/holidays.json', function(err, data){
+
+        if(err){
+            done(err);
+        }
+        dateroller.setHolidays(JSON.parse(data));
+        done();
+    });
   });
 
   beforeEach(function(){
