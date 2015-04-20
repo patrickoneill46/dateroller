@@ -1,21 +1,20 @@
-var expect = require('chai').expect,
+var chai = require('chai'),
     fs = require('fs'),
     moment = require('moment'),
     dateroller = require('../index');
 
-var saturdayEndOfMonth, 
-    saturdayStartOfMoth, 
-    sundayEndOfMonth,
-    sundayStartOfMonth, 
-    weekday,
-    xmas,
-    xmasEve,
-    mayday;
+var saturdayEndOfMonth = '29/11/2014',
+    sundayEndOfMonth = '30/11/2014',
+    saturdayStartOfMonth = '1/11/2014',
+    sundayStartOfMonth = '2/11/2014',
+    weekday = '26/11/2014',
+    xmas = '25-12-2014',
+    xmasEve = '24-12-2014',
+    mayday = '04-05-2015';
 
-describe('dateroller tests', function() {
+describe('Dateroller', function() {
 
   before(function(done){
-//    dateroller.loadHolidaysFromFile('test/data/holidays.json', done);
     fs.readFile('test/data/holidays.json', function(err, data){
 
         if(err){
@@ -27,121 +26,121 @@ describe('dateroller tests', function() {
   });
 
   beforeEach(function(){
-    saturdayEndOfMonth = new moment('29/11/2014', 'DD-MM-YYYY');
-    sundayEndOfMonth = new moment('30/11/2014', 'DD-MM-YYYY');
-    saturdayStartOfMonth = new moment('1/11/2014', 'DD-MM-YYYY');
-    sundayStartOfMonth = new moment('2/11/2014', 'DD-MM-YYYY');
-    weekday = new moment('26/11/2014', 'DD-MM-YYYY');
-    xmas = new moment('25-12-2014', 'DD-MM-YYYY');
-    xmasEve = new moment('24-12-2014', 'DD-MM-YYYY'),
-    mayday = new moment('04-05-2015', 'DD-MM-YYYY');
   });
 
   it('Following', function(){
 
+      var rolledDate;
       //saturday, end of the month
-      dateroller.following(saturdayEndOfMonth);
-      expect(saturdayEndOfMonth.date()).to.equal(1);
-      expect(saturdayEndOfMonth.month()).to.equal(11);
+      rolledDate = dateroller.following(saturdayEndOfMonth);
+      chai.assert.equal(1, rolledDate.date());
+      chai.assert.equal(11, rolledDate.month());
 
       //sunday, end of the month
-      dateroller.following(sundayEndOfMonth);
-      expect(sundayEndOfMonth.date()).to.equal(1);
-      expect(sundayEndOfMonth.month()).to.equal(11);
+      rolledDate = dateroller.following(sundayEndOfMonth);
+      chai.assert.equal(1, rolledDate.date());
+      chai.assert.equal(11, rolledDate.month());
 
       //weekday
-      dateroller.following(weekday);
-      expect(weekday.date()).to.equal(26);
-      expect(weekday.month()).to.equal(10);
+      rolledDate = dateroller.following(weekday);
+      chai.assert.equal(26, rolledDate.date());
+      chai.assert.equal(10, rolledDate.month());
 
-      //mayday
-      dateroller.following(mayday);
-      expect(mayday.date()).to.equal(5);
+      //mayday bank holiday
+      rolledDate = dateroller.following(mayday);
+      chai.assert.equal(5, rolledDate.date());
+      chai.assert.equal(4, rolledDate.month());
   });
 
   it('Modified Following', function(){
 
-      // saturday, end of the month
-      dateroller.modifiedFollowing(saturdayEndOfMonth);
-      expect(saturdayEndOfMonth.date()).to.equal(28);
-      expect(saturdayEndOfMonth.month()).to.equal(10);
+
+      var rolledDate;
+      //saturday, end of the month
+      rolledDate = dateroller.modifiedFollowing(saturdayEndOfMonth);
+      chai.assert.equal(28, rolledDate.date());
+      chai.assert.equal(10, rolledDate.month());
 
       //sunday, end of the month
-      dateroller.modifiedFollowing(sundayEndOfMonth);
-      expect(sundayEndOfMonth.date()).to.equal(28);
-      expect(sundayEndOfMonth.month()).to.equal(10);
+      rolledDate = dateroller.modifiedFollowing(sundayEndOfMonth);
+      chai.assert.equal(28, rolledDate.date());
+      chai.assert.equal(10, rolledDate.month());
 
       //weekday
-      dateroller.modifiedFollowing(weekday);
-      expect(weekday.date()).to.equal(26);
-      expect(weekday.month()).to.equal(10);
+      rolledDate = dateroller.modifiedFollowing(weekday);
+      chai.assert.equal(26, rolledDate.date());
+      chai.assert.equal(10, rolledDate.month());
 
-      //mayday
-      dateroller.following(mayday);
-      expect(mayday.date()).to.equal(5);
+      //mayday bank holiday
+      rolledDate = dateroller.modifiedFollowing(mayday);
+      chai.assert.equal(5, rolledDate.date());
+      chai.assert.equal(4, rolledDate.month());
+
   });
 
   it('Previous', function(){
 
-      // saturday, start of the month
-      dateroller.previous(saturdayStartOfMonth);
-      expect(saturdayStartOfMonth.date()).to.equal(31);
-      expect(saturdayStartOfMonth.month()).to.equal(9);
+      var rolledDate;
+      //saturday, end of the month
+      rolledDate = dateroller.previous(saturdayStartOfMonth);
+      chai.assert.equal(31, rolledDate.date());
+      chai.assert.equal(9, rolledDate.month());
 
-      //sunday, start of the month
-      dateroller.previous(sundayStartOfMonth);
-      expect(sundayStartOfMonth.date()).to.equal(31);
-      expect(sundayStartOfMonth.month()).to.equal(9);
+      //sunday, end of the month
+      rolledDate = dateroller.previous(sundayStartOfMonth);
+      chai.assert.equal(31, rolledDate.date());
+      chai.assert.equal(9, rolledDate.month());
 
-      dateroller.previous(weekday);
-      expect(weekday.date()).to.equal(26);
-      expect(weekday.month()).to.equal(10);
-      weekday
+      //weekday
+      rolledDate = dateroller.previous(weekday);
+      chai.assert.equal(26, rolledDate.date());
+      chai.assert.equal(10, rolledDate.month());
 
-      //mayday
-      dateroller.previous(mayday);
-      expect(mayday.date()).to.equal(1);
+      //mayday bank holiday
+      rolledDate = dateroller.previous(mayday);
+      chai.assert.equal(1, rolledDate.date());
+      chai.assert.equal(4, rolledDate.month());
+
   });
 
   it('Modified Previous', function(){
 
-      //saturday, start of the month
-      dateroller.modifiedPrevious(saturdayStartOfMonth);
-      expect(saturdayStartOfMonth.date()).to.equal(3);
-      expect(saturdayStartOfMonth.month()).to.equal(10);
+    rolledDate = dateroller.modifiedPrevious(saturdayStartOfMonth);
+    chai.assert.equal(3, rolledDate.date());
+    chai.assert.equal(10, rolledDate.month());
 
-      //sunday, start of the month
-      dateroller.modifiedPrevious(sundayStartOfMonth);
-      expect(sundayStartOfMonth.date()).to.equal(3);
-      expect(sundayStartOfMonth.month()).to.equal(10);
+    //sunday, end of the month
+    rolledDate = dateroller.modifiedPrevious(sundayStartOfMonth);
+    chai.assert.equal(3, rolledDate.date());
+    chai.assert.equal(10, rolledDate.month());
 
-      //weekday
-      dateroller.modifiedPrevious(weekday);
-      expect(weekday.date()).to.equal(26);
-      expect(weekday.month()).to.equal(10);
+    //weekday
+    rolledDate = dateroller.modifiedPrevious(weekday);
+    chai.assert.equal(26, rolledDate.date());
+    chai.assert.equal(10, rolledDate.month());
 
-      //mayday
-      dateroller.modifiedPrevious(mayday);
-      expect(mayday.date()).to.equal(1);
+    //mayday bank holiday
+    rolledDate = dateroller.modifiedPrevious(mayday);
+    chai.assert.equal(1, rolledDate.date());
+    chai.assert.equal(4, rolledDate.month());
+
   });
 
   it('Holiday checker', function(){
 
-
-    expect(dateroller.isHoliday(xmas)).to.be.true;
-
-    expect(dateroller.isHoliday(xmasEve)).to.be.false;
-    expect(dateroller.isHoliday(xmasEve, 1)).to.be.true;
-
-    expect(dateroller.isHoliday(mayday)).to.be.true;
-    expect(dateroller.isHoliday(mayday, 1)).to.be.false;
-
+    chai.assert.isTrue(dateroller.isHoliday(xmas));
+    chai.assert.isFalse(dateroller.isHoliday(xmasEve));
   });
 
   it('Weekend checker', function(){
 
-    var saturday = new moment('1-11-2014', 'DD-MM-YYYY');
-    expect(dateroller.isWeekDay(saturday)).to.be.false;
+    chai.assert.isFalse(dateroller.isWeekDay(saturdayStartOfMonth));
+    chai.assert.isTrue(dateroller.isWeekDay(weekday));
+  });
 
+  it('parses input', function(){
+
+    var badDate = dateroller.isHoliday('s');
+    chai.assert.isFalse(badDate);
   });
 });
