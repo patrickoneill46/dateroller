@@ -19,6 +19,11 @@
   "trailing": true,
   "smarttabs": true,
   "globals": {
-    "angular": false
+    "angular": false,
+    "describe": true,
+    "it": true,
+    "before":true,
+    "beforeEach": true,
+    "rolledDate": true
   }
 }

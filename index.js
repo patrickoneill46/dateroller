@@ -1,14 +1,28 @@
+'use strict';
+
 var	moment = require('moment'),
 	EventEmitter = require('events').EventEmitter;
 
 var BANK_HOLIDAYS = {},
-    DATE_FORMAT = {
-        US: 'MM-DD-YYYY',
-        ISO: 'YYYY-MM-DD',
-        UK: 'DD-MM-YYYY'
-    },
-    activeDateFormat = DATE_FORMAT.UK,
+    DATE_FORMAT = {},
+    DEFAULT_DATE_FORMAT = 'uk',
+    activeDateFormat = DEFAULT_DATE_FORMAT,
     events = new EventEmitter();
+
+Object.defineProperties(DATE_FORMAT, {
+    'us': {
+        writeable: false,
+        value: 'MM/DD/YYYY'
+    },
+    'uk': {
+        writeable: false,
+        value: 'DD/MM/YYYY'
+    },
+    'iso': {
+        writeable: false,
+        value: 'YYYY/MM/DD'
+    }
+});
 
 function setHolidays(holidays){
     BANK_HOLIDAYS = holidays;
@@ -41,7 +55,15 @@ exports.actual = function(date, calendar){
 };
 
 exports.setDateFormat = function(format){
-    activeDateFormat = DATE_FORMAT[format];
+    try {
+        if(!DATE_FORMAT[format]){
+            throw format + ' is not a valid convention';
+        } else {
+           activeDateFormat = DATE_FORMAT[format];
+        }
+    } catch (err){
+        console.error(err);
+    }
 };
 
 exports.addDateFormat = function(name, sample, format){
@@ -50,9 +72,9 @@ exports.addDateFormat = function(name, sample, format){
     }
 };
 
-
 function parseInput(input){
-	var date = new moment(input, activeDateFormat);
+	var date = new moment(input, DATE_FORMAT[activeDateFormat]);
+	console.log('ACTIVE DATE FORMAT: ', DATE_FORMAT[activeDateFormat]);
 	if(!date.isValid()){
 	    console.log('error: ', input, ' is not a valid date input');
 	    return false;
@@ -81,7 +103,7 @@ function isHoliday(date, numDays, calendar){
 
 		return clonedDate.isSame(element, 'day');
 	});
-};
+}
 
 //helper function
 function isSameMonth(originalDate, numDaysRoll){

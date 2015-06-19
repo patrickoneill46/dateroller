@@ -1,6 +1,8 @@
+'use strict';
+
 var chai = require('chai'),
     fs = require('fs'),
-    moment = require('moment'),
+//    moment = require('moment'),
     dateroller = require('../index');
 
 var saturdayEndOfMonth = '29/11/2014',
@@ -8,9 +10,10 @@ var saturdayEndOfMonth = '29/11/2014',
     saturdayStartOfMonth = '1/11/2014',
     sundayStartOfMonth = '2/11/2014',
     weekday = '26/11/2014',
-    xmas = '25-12-2014',
-    xmasEve = '24-12-2014',
-    mayday = '04-05-2015';
+    xmas = '25/12/2014',
+    xmasEve = '24/12/2014',
+    mayday = '04/05/2015',
+    rolledDate = null;
 
 describe('Dateroller', function() {
 
@@ -26,11 +29,11 @@ describe('Dateroller', function() {
   });
 
   beforeEach(function(){
+    rolledDate = null;
   });
 
   it('Following', function(){
 
-      var rolledDate;
       //saturday, end of the month
       rolledDate = dateroller.following(saturdayEndOfMonth);
       chai.assert.equal(1, rolledDate.date());
@@ -54,8 +57,6 @@ describe('Dateroller', function() {
 
   it('Modified Following', function(){
 
-
-      var rolledDate;
       //saturday, end of the month
       rolledDate = dateroller.modifiedFollowing(saturdayEndOfMonth);
       chai.assert.equal(28, rolledDate.date());
@@ -75,7 +76,6 @@ describe('Dateroller', function() {
       rolledDate = dateroller.modifiedFollowing(mayday);
       chai.assert.equal(5, rolledDate.date());
       chai.assert.equal(4, rolledDate.month());
-
   });
 
   it('Previous', function(){
@@ -100,10 +100,9 @@ describe('Dateroller', function() {
       rolledDate = dateroller.previous(mayday);
       chai.assert.equal(1, rolledDate.date());
       chai.assert.equal(4, rolledDate.month());
-
   });
 
-  it('Modified Previous', function(){
+  it.only('Modified Previous', function(){
 
     rolledDate = dateroller.modifiedPrevious(saturdayStartOfMonth);
     chai.assert.equal(3, rolledDate.date());
@@ -123,13 +122,21 @@ describe('Dateroller', function() {
     rolledDate = dateroller.modifiedPrevious(mayday);
     chai.assert.equal(1, rolledDate.date());
     chai.assert.equal(4, rolledDate.month());
-
   });
 
   it('Holiday checker', function(){
 
     chai.assert.isTrue(dateroller.isHoliday(xmas));
     chai.assert.isFalse(dateroller.isHoliday(xmasEve));
+  });
+
+    //ToDo: test adding new date format
+  it.skip('can specify new date input format', function(){
+
+//    dateroller.setDate
+
+
+
   });
 
   it('Weekend checker', function(){
