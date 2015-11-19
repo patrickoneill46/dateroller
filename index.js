@@ -1,13 +1,11 @@
 'use strict';
 
-var	moment = require('moment'),
-	EventEmitter = require('events').EventEmitter;
+var	moment = require('moment');
 
 var BANK_HOLIDAYS = {},
     DATE_FORMAT = {},
     DEFAULT_DATE_FORMAT = 'uk',
-    activeDateFormat = DEFAULT_DATE_FORMAT,
-    events = new EventEmitter();
+    activeDateFormat = DEFAULT_DATE_FORMAT;
 
 Object.defineProperties(DATE_FORMAT, {
     'us': {
@@ -30,31 +28,31 @@ function setHolidays(holidays){
 
 exports.setHolidays = setHolidays;
 
-exports.following = function (date, calendar){
+exports.following = function (date, calendar) {
 
 	return rollDate(date, true, false, calendar);
 };
 
-exports.modifiedFollowing = function (date, calendar){
+exports.modifiedFollowing = function (date, calendar) {
 
 	return rollDate(date, true, true, calendar);
 };
 
-exports.previous = function (date, calendar){
+exports.previous = function (date, calendar) {
 
 	return rollDate(date, false, false, calendar);
 };
 
-exports.modifiedPrevious = function (date, calendar){
+exports.modifiedPrevious = function (date, calendar) {
 
 	return rollDate(date, false, true, calendar);
 };
 
-exports.actual = function(date, calendar){
+exports.actual = function(date, calendar) {
 	return date;
 };
 
-exports.setDateFormat = function(format){
+exports.addDateFormat = function(format) {
     try {
         if(!DATE_FORMAT[format]){
             throw format + ' is not a valid convention';
@@ -66,9 +64,28 @@ exports.setDateFormat = function(format){
     }
 };
 
+exports.setDateFormat = function(formatKey) {
+
+	if(DATE_FORMAT[formatKey]) {
+		activeDateFormat = DATE_FORMAT[formatKey];
+	} else {
+		console.log(formatKey + ' is not a valid format');
+		return false;
+	}
+};
+
 exports.addDateFormat = function(name, sample, format){
-    if ( new moment(sample, format).isValid() ){
+
+    if(DATE_FORMAT[name]) {
+        console.log('date format already exists');
+        return false;
+    }
+
+    if (new moment(sample, format).isValid() ){
         DATE_FORMAT[name] = format;
+        return true;
+    } else {
+        return false;
     }
 };
 

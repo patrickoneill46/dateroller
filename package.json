@@ -19,8 +19,7 @@
   },
   "homepage": "https://github.com/patrickoneill46/dateroller",
   "dependencies": {
-    "moment": "^2.8.3",
-    "events": "*"
+    "moment": "^2.8.3"
   },
   "devDependencies": {
     "chai": "^1.9.2",

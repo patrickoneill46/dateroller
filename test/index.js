@@ -132,11 +132,7 @@ describe('Dateroller', function() {
 
     //ToDo: test adding new date format
   it.skip('can specify new date input format', function(){
-
 //    dateroller.setDate
-
-
-
   });
 
   it('Weekend checker', function(){
