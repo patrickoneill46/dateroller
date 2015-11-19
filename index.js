@@ -52,22 +52,11 @@ exports.actual = function(date, calendar) {
 	return date;
 };
 
-exports.addDateFormat = function(format) {
-    try {
-        if(!DATE_FORMAT[format]){
-            throw format + ' is not a valid convention';
-        } else {
-           activeDateFormat = DATE_FORMAT[format];
-        }
-    } catch (err){
-        console.error(err);
-    }
-};
-
 exports.setDateFormat = function(formatKey) {
 
 	if(DATE_FORMAT[formatKey]) {
 		activeDateFormat = DATE_FORMAT[formatKey];
+		return true;
 	} else {
 		console.log(formatKey + ' is not a valid format');
 		return false;
@@ -81,7 +70,7 @@ exports.addDateFormat = function(name, sample, format){
         return false;
     }
 
-    if (new moment(sample, format).isValid() ){
+    if (new moment(sample, format, true).isValid() ){
         DATE_FORMAT[name] = format;
         return true;
     } else {

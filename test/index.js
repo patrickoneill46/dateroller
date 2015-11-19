@@ -130,9 +130,20 @@ describe('Dateroller', function() {
     chai.assert.isFalse(dateroller.isHoliday(xmasEve));
   });
 
-    //ToDo: test adding new date format
-  it.skip('can specify new date input format', function(){
-//    dateroller.setDate
+  it('can specify new date input format', function(){
+
+    chai.assert.isFalse(dateroller.addDateFormat('uk', '08-10-1986', 'DD-MM-YYYY'));
+    chai.assert.isTrue(dateroller.addDateFormat('ie', '08/10/1986', 'DD/MM/YYYY'));
+    chai.assert.isFalse(dateroller.addDateFormat('fr', '081-10-1986', 'DD-MM-YYYY'));
+
+  });
+
+  it('can change the active date format', function() {
+
+    chai.assert.isTrue(dateroller.setDateFormat('iso'));
+    dateroller.addDateFormat('ie', '08/10/1986', 'DD/MM/YYYY');
+    chai.assert.isTrue(dateroller.setDateFormat('ie'));
+    chai.assert.isFalse(dateroller.setDateFormat('fr'));
   });
 
   it('Weekend checker', function(){
